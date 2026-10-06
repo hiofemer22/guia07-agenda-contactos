@@ -1,7 +1,37 @@
 // Agenda de Contactos
+
+// ===== Guardar contactos =====
+// Los contactos se guardan en el navegador (localStorage)
+// para que no se pierdan al recargar o cerrar la página.
+const CLAVE_ALMACENAMIENTO = "agendaContactos";
+
+// Recupera los contactos guardados, o una lista vacía si no hay ninguno
+function cargarContactos() {
+  try {
+    let datos = JSON.parse(localStorage.getItem(CLAVE_ALMACENAMIENTO));
+    if (!Array.isArray(datos)) return [];
+    // Solo se aceptan contactos con todos sus datos
+    return datos.filter(function (c) {
+      return c && typeof c.id === "number" && c.nombre && c.telefono && c.correo;
+    });
+  } catch (e) {
+    // Datos dañados o navegador sin permiso de almacenamiento
+    return [];
+  }
+}
+
+// Guarda la lista actual de contactos en el navegador
+function guardarContactos() {
+  try {
+    localStorage.setItem(CLAVE_ALMACENAMIENTO, JSON.stringify(contactos));
+  } catch (e) {
+    mostrarMensaje("No se pudieron guardar los contactos en este navegador.", "error");
+  }
+}
+
 // Lista donde se guardan los contactos registrados.
 // Cada contacto tiene: id, nombre, telefono y correo.
-let contactos = [];
+let contactos = cargarContactos();
 
 // Expresiones regulares para las validaciones
 // Nombre: solo letras (incluye tildes y ñ) y espacios
@@ -106,6 +136,7 @@ formContacto.addEventListener("submit", function (evento) {
     correo: correo,
   };
   contactos.push(contacto);
+  guardarContactos();
   mostrarContactos();
 
   mostrarMensaje("Contacto " + nombre + " agregado correctamente.", "exito");
@@ -215,6 +246,7 @@ function eliminarContacto(id, tarjeta) {
   contactos = contactos.filter(function (c) {
     return c.id !== id;
   });
+  guardarContactos();
 
   // Animación de salida y luego se vuelve a dibujar la lista
   tarjeta.classList.add("eliminando");
