@@ -21,7 +21,22 @@
       <!-- Sección para registrar un nuevo contacto -->
       <section id="seccion-registro" class="tarjeta">
         <h2>Nuevo contacto</h2>
-        <p class="texto-pendiente">Próximamente: formulario de registro.</p>
+
+        <form id="formContacto" novalidate>
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" placeholder="Ej: María López" maxlength="50" />
+
+          <label for="telefono">Teléfono</label>
+          <input type="tel" id="telefono" placeholder="Ej: 987654321" maxlength="15" />
+
+          <label for="correo">Correo electrónico</label>
+          <input type="email" id="correo" placeholder="Ej: maria@gmail.com" maxlength="60" />
+
+          <button type="submit">Agregar contacto</button>
+        </form>
+
+        <!-- Mensaje de validación o confirmación -->
+        <p id="mensaje"></p>
       </section>
 
       <!-- Sección con la lista de contactos -->

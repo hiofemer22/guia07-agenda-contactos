@@ -72,6 +72,90 @@ h2 {
   font-style: italic;
 }
 
+/* Formulario de registro */
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  font-size: 15px;
+  background-color: var(--color-tarjeta);
+  color: var(--color-texto);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.2);
+}
+
+input.campo-error {
+  border-color: var(--color-peligro);
+}
+
+button {
+  padding: 10px 15px;
+  background-color: var(--color-primario);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: var(--color-primario-oscuro);
+}
+
+form button {
+  width: 100%;
+}
+
+/* Mensajes de validación y confirmación */
+#mensaje:empty {
+  display: none;
+}
+
+.mensaje {
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-bottom: 0;
+  animation: aparecer 0.3s ease-out;
+}
+
+.mensaje.exito {
+  color: #1e7e34;
+  background-color: #e6f4ea;
+  border-left: 4px solid #28a745;
+}
+
+.mensaje.error {
+  color: #b02a37;
+  background-color: #fdecea;
+  border-left: 4px solid var(--color-peligro);
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Pie de página */
 footer {
   text-align: center;
