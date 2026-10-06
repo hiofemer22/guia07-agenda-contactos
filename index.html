@@ -54,6 +54,23 @@
       </section>
     </main>
 
+    <!-- Ventana con el detalle de un contacto -->
+    <dialog id="ventanaDetalle" class="ventana-detalle">
+      <div class="detalle-contenido">
+        <button id="btnCerrarDetalle" class="btn-cerrar" aria-label="Cerrar">✖</button>
+        <div id="detalleAvatar" class="avatar avatar-grande"></div>
+        <h2 id="detalleNombre"></h2>
+        <dl class="detalle-datos">
+          <dt>📞 Teléfono</dt>
+          <dd><a id="detalleTelefono"></a></dd>
+          <dt>✉️ Correo electrónico</dt>
+          <dd><a id="detalleCorreo"></a></dd>
+          <dt>📅 Registrado el</dt>
+          <dd id="detalleFecha"></dd>
+        </dl>
+      </div>
+    </dialog>
+
     <!-- Pie de página -->
     <footer>
       <p>Desarrollo de Software I - Guía 07 - Ejercicio Propuesto 02</p>

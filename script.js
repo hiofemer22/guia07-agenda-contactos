@@ -134,6 +134,9 @@ function crearElemento(etiqueta, clase, texto) {
 function crearTarjeta(contacto) {
   let tarjeta = crearElemento("article", "contacto", "");
   tarjeta.dataset.id = contacto.id;
+  // Permite seleccionar la tarjeta con la tecla Tab
+  tarjeta.tabIndex = 0;
+  tarjeta.title = "Ver detalle de " + contacto.nombre;
 
   let avatar = crearElemento("div", "avatar", contacto.nombre.charAt(0).toUpperCase());
 
@@ -220,11 +223,66 @@ function eliminarContacto(id, tarjeta) {
   mostrarMensaje("Contacto " + contacto.nombre + " eliminado correctamente.", "exito");
 }
 
-// Un solo evento "click" en la lista detecta qué botón de eliminar se presionó
+// Un solo evento "click" en la lista detecta qué se presionó:
+// el botón de eliminar o la tarjeta (para ver el detalle)
 listaContactos.addEventListener("click", function (evento) {
-  let boton = evento.target.closest(".btn-eliminar");
-  if (!boton) return;
+  let tarjeta = evento.target.closest(".contacto");
+  if (!tarjeta) return;
 
-  let tarjeta = boton.closest(".contacto");
-  eliminarContacto(Number(tarjeta.dataset.id), tarjeta);
+  let id = Number(tarjeta.dataset.id);
+  if (evento.target.closest(".btn-eliminar")) {
+    eliminarContacto(id, tarjeta);
+  } else {
+    verDetalle(id);
+  }
+});
+
+// ===== Ver detalle de un contacto =====
+
+const ventanaDetalle = document.getElementById("ventanaDetalle");
+
+// Abre una ventana con toda la información del contacto
+function verDetalle(id) {
+  let contacto = contactos.find(function (c) {
+    return c.id === id;
+  });
+  if (!contacto) return;
+
+  document.getElementById("detalleAvatar").textContent = contacto.nombre.charAt(0).toUpperCase();
+  document.getElementById("detalleNombre").textContent = contacto.nombre;
+
+  // El teléfono y el correo son enlaces para llamar o escribir directamente
+  let enlaceTelefono = document.getElementById("detalleTelefono");
+  enlaceTelefono.textContent = contacto.telefono;
+  enlaceTelefono.href = "tel:" + contacto.telefono;
+
+  let enlaceCorreo = document.getElementById("detalleCorreo");
+  enlaceCorreo.textContent = contacto.correo;
+  enlaceCorreo.href = "mailto:" + contacto.correo;
+
+  // El id del contacto es la fecha y hora en que se registró
+  document.getElementById("detalleFecha").textContent = new Date(contacto.id).toLocaleString("es-PE", {
+    dateStyle: "long",
+    timeStyle: "short",
+  });
+
+  ventanaDetalle.showModal();
+}
+
+// Se cierra con el botón ✖, con la tecla Escape (automático) o haciendo clic fuera de la ventana
+document.getElementById("btnCerrarDetalle").addEventListener("click", function () {
+  ventanaDetalle.close();
+});
+
+ventanaDetalle.addEventListener("click", function (evento) {
+  if (evento.target === ventanaDetalle) {
+    ventanaDetalle.close();
+  }
+});
+
+// Con el teclado: Enter sobre una tarjeta seleccionada abre su detalle
+listaContactos.addEventListener("keydown", function (evento) {
+  if (evento.key === "Enter" && evento.target.classList.contains("contacto")) {
+    verDetalle(Number(evento.target.dataset.id));
+  }
 });
