@@ -140,6 +140,29 @@ h2 {
   text-overflow: ellipsis;
 }
 
+/* Botón para eliminar un contacto */
+.btn-eliminar {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 6px 9px;
+  background-color: transparent;
+  border: 1px solid var(--color-borde);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.btn-eliminar:hover {
+  background-color: #fdecea;
+  border-color: var(--color-peligro);
+}
+
+/* Animación cuando se elimina una tarjeta */
+.contacto.eliminando {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
 .lista-vacia {
   text-align: center;
   color: var(--color-texto-suave);

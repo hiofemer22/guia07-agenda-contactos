@@ -142,8 +142,14 @@ function crearTarjeta(contacto) {
   datos.appendChild(crearElemento("p", "contacto-dato", "📞 " + contacto.telefono));
   datos.appendChild(crearElemento("p", "contacto-dato", "✉️ " + contacto.correo));
 
+  // Botón para eliminar el contacto
+  let btnEliminar = crearElemento("button", "btn-eliminar", "🗑️");
+  btnEliminar.title = "Eliminar contacto";
+  btnEliminar.setAttribute("aria-label", "Eliminar a " + contacto.nombre);
+
   tarjeta.appendChild(avatar);
   tarjeta.appendChild(datos);
+  tarjeta.appendChild(btnEliminar);
   return tarjeta;
 }
 
@@ -189,3 +195,36 @@ buscador.addEventListener("input", mostrarContactos);
 
 // Se muestra la lista al cargar la página
 mostrarContactos();
+
+// ===== Eliminar contactos =====
+
+// Elimina un contacto después de pedir confirmación
+function eliminarContacto(id, tarjeta) {
+  let contacto = contactos.find(function (c) {
+    return c.id === id;
+  });
+  if (!contacto) return;
+
+  let confirmar = confirm("¿Seguro que deseas eliminar a " + contacto.nombre + "?");
+  if (!confirmar) return;
+
+  // Se quita el contacto de la lista
+  contactos = contactos.filter(function (c) {
+    return c.id !== id;
+  });
+
+  // Animación de salida y luego se vuelve a dibujar la lista
+  tarjeta.classList.add("eliminando");
+  setTimeout(mostrarContactos, 300);
+
+  mostrarMensaje("Contacto " + contacto.nombre + " eliminado correctamente.", "exito");
+}
+
+// Un solo evento "click" en la lista detecta qué botón de eliminar se presionó
+listaContactos.addEventListener("click", function (evento) {
+  let boton = evento.target.closest(".btn-eliminar");
+  if (!boton) return;
+
+  let tarjeta = boton.closest(".contacto");
+  eliminarContacto(Number(tarjeta.dataset.id), tarjeta);
+});
