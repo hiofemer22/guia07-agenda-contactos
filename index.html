@@ -41,8 +41,16 @@
 
       <!-- Sección con la lista de contactos -->
       <section id="seccion-lista" class="tarjeta">
-        <h2>Mis contactos</h2>
-        <p class="texto-pendiente">Próximamente: lista de contactos.</p>
+        <h2>Mis contactos <span id="contador" class="contador">0</span></h2>
+
+        <!-- Buscador de contactos -->
+        <input type="search" id="buscador" placeholder="🔍 Buscar por nombre, teléfono o correo" />
+
+        <!-- Aquí se muestran los contactos como tarjetas -->
+        <div id="listaContactos" class="lista-contactos"></div>
+
+        <!-- Mensaje cuando no hay contactos para mostrar -->
+        <p id="listaVacia" class="lista-vacia">Aún no tienes contactos registrados.</p>
       </section>
     </main>
 

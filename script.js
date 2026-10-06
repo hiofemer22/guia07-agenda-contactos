@@ -18,6 +18,12 @@ const campoTelefono = document.getElementById("telefono");
 const campoCorreo = document.getElementById("correo");
 const mensaje = document.getElementById("mensaje");
 
+// Elementos de la lista
+const listaContactos = document.getElementById("listaContactos");
+const listaVacia = document.getElementById("listaVacia");
+const contador = document.getElementById("contador");
+const buscador = document.getElementById("buscador");
+
 // Muestra un mensaje de éxito o error debajo del formulario
 function mostrarMensaje(texto, tipo) {
   let icono = tipo === "exito" ? "✔ " : "✖ ";
@@ -100,6 +106,7 @@ formContacto.addEventListener("submit", function (evento) {
     correo: correo,
   };
   contactos.push(contacto);
+  mostrarContactos();
 
   mostrarMensaje("Contacto " + nombre + " agregado correctamente.", "exito");
   formContacto.reset();
@@ -112,3 +119,73 @@ formContacto.addEventListener("submit", function (evento) {
     campo.classList.remove("campo-error");
   });
 });
+
+// ===== Listar contactos =====
+
+// Crea un elemento HTML con una clase y un texto
+function crearElemento(etiqueta, clase, texto) {
+  let elemento = document.createElement(etiqueta);
+  elemento.className = clase;
+  elemento.textContent = texto;
+  return elemento;
+}
+
+// Crea la tarjeta HTML de un contacto
+function crearTarjeta(contacto) {
+  let tarjeta = crearElemento("article", "contacto", "");
+  tarjeta.dataset.id = contacto.id;
+
+  let avatar = crearElemento("div", "avatar", contacto.nombre.charAt(0).toUpperCase());
+
+  let datos = crearElemento("div", "contacto-datos", "");
+  datos.appendChild(crearElemento("h3", "contacto-nombre", contacto.nombre));
+  datos.appendChild(crearElemento("p", "contacto-dato", "📞 " + contacto.telefono));
+  datos.appendChild(crearElemento("p", "contacto-dato", "✉️ " + contacto.correo));
+
+  tarjeta.appendChild(avatar);
+  tarjeta.appendChild(datos);
+  return tarjeta;
+}
+
+// Muestra en pantalla los contactos ordenados por nombre,
+// filtrados según el texto del buscador
+function mostrarContactos() {
+  let filtro = buscador.value.trim().toLowerCase();
+
+  let visibles = contactos
+    .filter(function (c) {
+      return (
+        c.nombre.toLowerCase().includes(filtro) ||
+        c.telefono.includes(filtro) ||
+        c.correo.includes(filtro)
+      );
+    })
+    .sort(function (a, b) {
+      return a.nombre.localeCompare(b.nombre, "es");
+    });
+
+  // Se borra la lista anterior y se vuelve a dibujar
+  listaContactos.innerHTML = "";
+  visibles.forEach(function (contacto) {
+    listaContactos.appendChild(crearTarjeta(contacto));
+  });
+
+  contador.textContent = contactos.length;
+
+  // Mensaje cuando no hay nada que mostrar
+  if (contactos.length === 0) {
+    listaVacia.textContent = "Aún no tienes contactos registrados.";
+    listaVacia.hidden = false;
+  } else if (visibles.length === 0) {
+    listaVacia.textContent = "No se encontraron contactos que coincidan con la búsqueda.";
+    listaVacia.hidden = false;
+  } else {
+    listaVacia.hidden = true;
+  }
+}
+
+// La lista se filtra mientras el usuario escribe en el buscador
+buscador.addEventListener("input", mostrarContactos);
+
+// Se muestra la lista al cargar la página
+mostrarContactos();
